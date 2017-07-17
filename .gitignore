@@ -50,3 +50,8 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+#vim
+.*.sw*
+ws_server
+ws_client
