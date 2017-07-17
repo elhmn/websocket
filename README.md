@@ -1,2 +1,2 @@
 # websocket
-Simple C linux websocket server
+Basic C linux websocket server

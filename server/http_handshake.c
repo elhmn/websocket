@@ -36,8 +36,8 @@
 #include <errno.h>
 #include <ctype.h>
 #include <sys/signal.h>
-#include <nettle/base64.h>
-#include <nettle/sha.h>
+#include "base64.h"
+#include "sha.h"
 
 
 /*

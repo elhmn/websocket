@@ -299,8 +299,8 @@ int					connection_handler(int sock)
 		switch (fork())
 		{
 			/*
-			 ** Child
-			 */
+			** Child
+			*/
 			case 0:
 				close(sock);
 				communication_handler(sock_com);
@@ -309,9 +309,9 @@ int					connection_handler(int sock)
 			case -1:
 				perror("fork");
 				return (-1);
-				/*
-				 ** Father
-				 */
+			/*
+			** Father
+			*/
 			default:
 				close(sock_com);
 				signal(SIGCHLD, SIG_IGN);/* That's dirty */

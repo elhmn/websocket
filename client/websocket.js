@@ -1,4 +1,3 @@
-``
 var socket_onopen = function (event) 
 {
 	console.log("Socket connection opened !");
