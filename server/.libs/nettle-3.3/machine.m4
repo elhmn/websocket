@@ -1,1 +1,1 @@
-x86_64/machine.m4
+x86/machine.m4

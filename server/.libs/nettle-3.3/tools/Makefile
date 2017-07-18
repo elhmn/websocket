@@ -10,7 +10,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(INSTALL_PROGRAM) -s
-MKDIR_P = /usr/bin/mkdir -p
+MKDIR_P = /bin/mkdir -p
 
 include ../config.make
 
@@ -20,7 +20,7 @@ PRE_LDFLAGS = -L..
 HOGWEED_TARGETS = pkcs1-conv$(EXEEXT)
 TARGETS = sexp-conv$(EXEEXT) nettle-hash$(EXEEXT) nettle-pbkdf2$(EXEEXT) \
 	  nettle-lfib-stream$(EXEEXT) \
-	   $(HOGWEED_TARGETS)
+	  # $(HOGWEED_TARGETS)
 
 all: $(TARGETS)
 

@@ -62,6 +62,7 @@ int					put_socket(int sock)
 
 int					create_sock_stream(char *host_name,
 										char *serv_name,
+										int port,
 										char *proto_name)
 {
 	int					sock;
@@ -94,8 +95,8 @@ int					create_sock_stream(char *host_name,
 	memset(&addr, 0, sizeof(struct addr_in*));
 	addr.sin_family = AF_INET;
 	addr.sin_port = (serv_name)
-		? (unsigned int)servent->s_port
-		: htonl(0);
+		? servent->s_port
+		: htons(port);
 	addr.sin_addr.s_addr = (host_name)
 		? ((struct in_addr*)hostent->h_addr)->s_addr
 		: htons(INADDR_ANY);
@@ -324,11 +325,23 @@ int					main(int ac, char **av)
 {
 	t_ident			ident;
 	int				sock_con;
+	char			*serv;
+	int				port;
 
+	serv = NULL;
+	port = 0;
 	if (ac > 1)
-		option_handler(ac, av, &ident);
+	{
+		port = atoi(av[1]);
+		if (ac == 3)
+			serv = av[2];
+	}
 	init_ident(&ident);
-	sock_con = create_sock_stream(NULL, NULL, "tcp");
+	if ((sock_con = create_sock_stream(NULL, serv, port, "tcp")) < 0)
+	{
+		fprintf(stderr, "ERROR : sock_con < 0\n");
+		exit(EXIT_FAILURE);
+	}
 	fprintf(stdout, "websocket server adress : ");
 	put_socket(sock_con);
 	connection_handler(sock_con);

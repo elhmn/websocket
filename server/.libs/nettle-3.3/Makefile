@@ -10,10 +10,10 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(INSTALL_PROGRAM) -s
-MKDIR_P = /usr/bin/mkdir -p
+MKDIR_P = /bin/mkdir -p
 
-OPT_NETTLE_OBJS =  gcm-hash8.$(OBJEXT)
-OPT_HOGWEED_OBJS =  ecc-192-modp.$(OBJEXT) ecc-224-modp.$(OBJEXT) ecc-25519-modp.$(OBJEXT) ecc-256-redc.$(OBJEXT) ecc-384-modp.$(OBJEXT) ecc-521-modp.$(OBJEXT)
+OPT_NETTLE_OBJS = 
+OPT_HOGWEED_OBJS = 
 
 OPT_NETTLE_SOURCES = 
 
@@ -25,8 +25,8 @@ PRE_CPPFLAGS = -I.
 EXTRA_CFLAGS = $(CCPIC)
 
 # FIXME: Add configuration of LIBEXT?
-LIBTARGETS =  libnettle.a  libhogweed.a
-SHLIBTARGETS =  $(LIBNETTLE_FORLINK)  $(LIBHOGWEED_FORLINK)
+LIBTARGETS =  libnettle.a # libhogweed.a
+SHLIBTARGETS =  $(LIBNETTLE_FORLINK) # $(LIBHOGWEED_FORLINK)
 
 getopt_SOURCES = getopt.c getopt1.c
 getopt_TARGETS = $(getopt_SOURCES:.c=.$(OBJEXT))
@@ -42,7 +42,7 @@ TARGETS = aesdata$(EXEEXT_FOR_BUILD) desdata$(EXEEXT_FOR_BUILD) \
 
 DOCTARGETS = # nettle.info nettle.html nettle.pdf
 
-PKGCONFIG_FILES = nettle.pc  hogweed.pc
+PKGCONFIG_FILES = nettle.pc # hogweed.pc
 pkgconfigdir = $(libdir)/pkgconfig
 
 all check install uninstall:
@@ -438,7 +438,7 @@ version.h: version.h.in config.status
 # Installation
 install-doc: # install-info
 install-here: install-doc install-headers install-static install-pkgconfig \
-	 install-shared-nettle  install-shared-hogweed
+	 install-shared-nettle # install-shared-hogweed
 
 install-static: $(LIBTARGETS)
 	$(MKDIR_P) $(DESTDIR)$(libdir)
@@ -525,7 +525,7 @@ uninstall-info:
 	-rm -f $(DESTDIR)$(infodir)/nettle.info
 
 # FIXME: Leaves the links around
-uninstall-shared: uninstall-shared-nettle  uninstall-shared-hogweed
+uninstall-shared: uninstall-shared-nettle # uninstall-shared-hogweed
 
 uninstall-dll-nettle:
 	rm -f $(DESTDIR)$(bindir)/$(LIBNETTLE_FORLINK)

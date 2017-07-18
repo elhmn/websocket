@@ -2,13 +2,13 @@
 
 CC = gcc
 CXX = g++
-CFLAGS = -g -O2 -ggdb3 -Wall -W   -Wmissing-prototypes -Wmissing-declarations -Wstrict-prototypes   -Wpointer-arith -Wbad-function-cast -Wnested-externs
-CXXFLAGS = -g -O2
+CFLAGS = -g -O2 -ggdb3 -Wno-pointer-sign -Wall -W   -Wmissing-prototypes -Wmissing-declarations -Wstrict-prototypes   -Wpointer-arith -Wbad-function-cast -Wnested-externs
+CXXFLAGS = 
 CCPIC = -fpic
 CPPFLAGS = 
 DEFS = -DHAVE_CONFIG_H
 LDFLAGS = 
-LIBS = -lgmp 
+LIBS = 
 LIBOBJS = 
 EMULATOR = 
 NM = nm
@@ -46,7 +46,7 @@ LIBHOGWEED_FORLINK = libhogweed.so
 LIBHOGWEED_LIBS = libnettle.so $(LIBS)
 LIBHOGWEED_LINK = $(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-soname=$(LIBHOGWEED_SONAME)
 
-GMP_NUMB_BITS = 64
+GMP_NUMB_BITS = 0
 
 AR = ar
 ARFLAGS = cru
@@ -61,7 +61,7 @@ prefix	=	/usr/local
 exec_prefix =	${prefix}
 datarootdir =	${prefix}/share
 bindir =	${exec_prefix}/bin
-libdir =	${exec_prefix}/lib64
+libdir =	${exec_prefix}/lib
 includedir =	${prefix}/include
 infodir =	${datarootdir}/info
 

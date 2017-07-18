@@ -53,8 +53,8 @@ CXX_SOURCES = cxx-test.cxx
 
 TS_NETTLE = $(TS_NETTLE_SOURCES:.c=$(EXEEXT))
 TS_HOGWEED = $(TS_HOGWEED_SOURCES:.c=$(EXEEXT))
-TS_C = $(TS_NETTLE)  $(TS_HOGWEED)
-TS_CXX =  $(CXX_SOURCES:.cxx=$(EXEEXT))
+TS_C = $(TS_NETTLE) # $(TS_HOGWEED)
+TS_CXX = # $(CXX_SOURCES:.cxx=$(EXEEXT))
 TARGETS = $(TS_C) $(TS_CXX)
 TS_SH = sexp-conv-test pkcs1-conv-test nettle-pbkdf2-test symbols-test
 TS_ALL = $(TARGETS) $(TS_SH)  dlopen-test$(EXEEXT)
@@ -83,7 +83,7 @@ all: $(EXTRA_TARGETS)
 # to use suffix rules to build the test executables. So we use an
 # explicit rule for each and every executable.
 
-LIB_HOGWEED =  -lhogweed
+LIB_HOGWEED = # -lhogweed
 TEST_OBJS = testutils.$(OBJEXT) ../nettle-internal.$(OBJEXT) \
 	    $(LIB_HOGWEED) -lnettle $(LIBS)
 
@@ -110,7 +110,7 @@ test-rules:
 include $(srcdir)/.test-rules.make
 
 $(TARGETS) $(EXTRA_TARGETS): testutils.$(OBJEXT) ../nettle-internal.$(OBJEXT) \
-	../libnettle.stamp  ../libhogweed.stamp
+	../libnettle.stamp # ../libhogweed.stamp
 
 # For use as, e.g.,
 #

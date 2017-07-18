@@ -1,1 +1,1 @@
-x86_64/md5-compress.asm
+x86/md5-compress.asm

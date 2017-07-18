@@ -41,7 +41,7 @@
 #define HAVE_LIBDL 1
 
 /* Define to 1 if you have the `gmp' library (-lgmp). */
-#define HAVE_LIBGMP 1
+/* #undef HAVE_LIBGMP */
 
 /* Define if compiler and linker supports __attribute__ ifunc */
 #define HAVE_LINK_IFUNC 1
@@ -54,18 +54,18 @@
 
 /* Define to 1 each of the following for which a native (ie. CPU specific)
     implementation of the corresponding routine exists.  */
-#define HAVE_NATIVE_ecc_192_modp 1
+/* #undef HAVE_NATIVE_ecc_192_modp */
 /* #undef HAVE_NATIVE_ecc_192_redc */
-#define HAVE_NATIVE_ecc_224_modp 1
+/* #undef HAVE_NATIVE_ecc_224_modp */
 /* #undef HAVE_NATIVE_ecc_224_redc */
-#define HAVE_NATIVE_ecc_25519_modp 1
+/* #undef HAVE_NATIVE_ecc_25519_modp */
 /* #undef HAVE_NATIVE_ecc_256_modp */
-#define HAVE_NATIVE_ecc_256_redc 1
-#define HAVE_NATIVE_ecc_384_modp 1
+/* #undef HAVE_NATIVE_ecc_256_redc */
+/* #undef HAVE_NATIVE_ecc_384_modp */
 /* #undef HAVE_NATIVE_ecc_384_redc */
-#define HAVE_NATIVE_ecc_521_modp 1
+/* #undef HAVE_NATIVE_ecc_521_modp */
 /* #undef HAVE_NATIVE_ecc_521_redc */
-#define HAVE_NATIVE_gcm_hash8 1
+/* #undef HAVE_NATIVE_gcm_hash8 */
 /* #undef HAVE_NATIVE_salsa20_core */
 /* #undef HAVE_NATIVE_sha1_compress */
 /* #undef HAVE_NATIVE_sha256_compress */
@@ -90,7 +90,7 @@
 #define HAVE_OPENSSL_ECDSA_H 1
 
 /* Define to 1 if you have the `secure_getenv' function. */
-#define HAVE_SECURE_GETENV 1
+/* #undef HAVE_SECURE_GETENV */
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
@@ -144,13 +144,13 @@
 /* #undef SIZEOF_INT */
 
 /* The size of `long', as computed by sizeof. */
-#define SIZEOF_LONG 8
+#define SIZEOF_LONG 4
 
 /* The size of `short', as computed by sizeof. */
 /* #undef SIZEOF_SHORT */
 
 /* The size of `size_t', as computed by sizeof. */
-#define SIZEOF_SIZE_T 8
+#define SIZEOF_SIZE_T 4
 
 /* The size of `void*', as computed by sizeof. */
 /* #undef SIZEOF_VOIDP */
@@ -170,7 +170,7 @@
 #define TIME_WITH_SYS_TIME 1
 
 /* Defined if public key features are enabled */
-#define WITH_HOGWEED 1
+/* #undef WITH_HOGWEED */
 
 /* Define if you have openssl's libcrypto (used for benchmarking) */
 #define WITH_OPENSSL 1

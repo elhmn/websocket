@@ -11,7 +11,7 @@ PRE_CPPFLAGS = -I.. -I$(top_srcdir)
 PRE_LDFLAGS = -L..
 
 OPENSSL_LIBFLAGS = -lcrypto
-BENCH_LIBS = -lgmp  -lm
+BENCH_LIBS = -lrt  -lm
 
 HOGWEED_TARGETS = rsa-keygen$(EXEEXT) rsa-sign$(EXEEXT) \
 	      rsa-verify$(EXEEXT) rsa-encrypt$(EXEEXT) rsa-decrypt$(EXEEXT) \
@@ -21,7 +21,7 @@ HOGWEED_TARGETS = rsa-keygen$(EXEEXT) rsa-sign$(EXEEXT) \
 ENC_TARGETS = base16enc$(EXEEXT) base16dec$(EXEEXT) \
 	      base64enc$(EXEEXT) base64dec$(EXEEXT)
 TARGETS = nettle-benchmark$(EXEEXT) eratosthenes$(EXEEXT) \
-	  $(ENC_TARGETS)  $(HOGWEED_TARGETS)
+	  $(ENC_TARGETS) # $(HOGWEED_TARGETS)
 
 SOURCES = nettle-benchmark.c hogweed-benchmark.c ecc-benchmark.c \
 	eratosthenes.c random-prime.c \

@@ -1,1 +1,1 @@
-x86_64/aes-decrypt-internal.asm
+x86/aes-decrypt-internal.asm

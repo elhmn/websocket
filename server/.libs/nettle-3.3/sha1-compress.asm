@@ -1,1 +1,1 @@
-x86_64/sha1-compress.asm
+x86/sha1-compress.asm

@@ -4,9 +4,9 @@ SRCS = main.c http_handshake.c
 
 OBJS = $(SRCS:.c=.o)
 
-WSLAY_LIB_DIR = -L .libs/wslay/lib/.libs/ -L .libs/nettle-3.3/
+WSLAY_LIB_DIR = -L .libs/wslay/lib/.libs/
 
-WSLAY_INC_DIR = -I .libs/wslay/lib/includes/ -I .libs/nettle-3.3/
+WSLAY_INC_DIR = -I .libs/wslay/lib/includes/
 
 LIBS = -lnettle -lwslay
 

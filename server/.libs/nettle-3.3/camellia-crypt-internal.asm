@@ -1,1 +1,1 @@
-x86_64/camellia-crypt-internal.asm
+x86/camellia-crypt-internal.asm

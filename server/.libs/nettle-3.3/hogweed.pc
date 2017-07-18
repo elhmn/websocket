@@ -1,6 +1,6 @@
 prefix=/usr/local
 exec_prefix=${prefix}
-libdir=${exec_prefix}/lib64
+libdir=${exec_prefix}/lib
 includedir=${prefix}/include
 
 # Uses Requires.private and Libs.private, under the assumption that
@@ -13,7 +13,7 @@ URL: http://www.lysator.liu.se/~nisse/nettle
 Version: 3.3
 Requires: # nettle
 Requires.private:  nettle
-Libs: -L${libdir} -lhogweed # -lgmp 
-Libs.private:  -lgmp 
+Libs: -L${libdir} -lhogweed # 
+Libs.private:  
 Cflags: -I${includedir}
 
