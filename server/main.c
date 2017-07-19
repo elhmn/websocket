@@ -43,6 +43,46 @@ int					option_handler(int ac, char **av, t_ident *ident)
 	return (0);
 }
 
+int					put_addr(struct sockaddr *addr, socklen_t len)
+{
+	char			hostbuf[NI_MAXHOST];
+	char			servbuf[NI_MAXSERV];
+	int				s;
+
+	if ((s = getnameinfo(addr, len, hostbuf, NI_MAXHOST,
+						servbuf, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV)) != 0)
+	{
+		fprintf(stderr, "getnameinfo: %s\n", gai_strerror(s));
+		return (-1);
+	}
+	fprintf(stdout, "HOST = [%s] , SERV = [%s] \n",
+			hostbuf, servbuf);
+	return (0);
+}
+
+/*
+** not sure this actually works
+*/
+
+int					put_socket_ipv6(int sock)
+{
+	struct sockaddr_in6		addr;
+	socklen_t				len;
+	char					buffer[INET6_ADDRSTRLEN];
+
+	len = sizeof(struct sockaddr_in6);
+	if ((getsockname(sock,
+					(struct sockaddr*)&addr, &len)) < 0)
+	{
+		perror("getsockname");
+		return (-1);
+	}
+	inet_ntop(AF_INET6, &addr.sin6_addr, buffer, INET6_ADDRSTRLEN);
+	fprintf(stdout, "IP = [%s] , PORT = [%u] \n",
+			buffer, htons(addr.sin6_port));
+	return (0);
+}
+
 int					put_socket(int sock)
 {
 	struct sockaddr_in		addr;
@@ -60,6 +100,59 @@ int					put_socket(int sock)
 	return (0);
 }
 
+int					create_sock_stream_ipv6(char *port, char *proto_name)
+{
+	int					sock;
+	int					len;
+	struct addrinfo		hints;
+	struct addrinfo		*res;
+	struct addrinfo		*rp;
+	struct protoent		*protoent;
+	int					s;
+	int					privilege;
+
+	if (proto_name && !(protoent = getprotobyname(proto_name)))
+	{
+		perror("protoname");
+		return (-1);
+	}
+	memset(&hints, 0, sizeof(struct addrinfo));
+	hints.ai_family = AF_INET6;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_flags = AI_PASSIVE;
+	hints.ai_protocol = protoent->p_proto;
+	if ((s = getaddrinfo(NULL, port, &hints, &res)) != 0)
+	{
+		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(s));
+		return (-1);
+	}
+	for (rp = res; rp != NULL; rp = rp->ai_next)
+	{
+		privilege = 1;
+		if ((sock = socket(AF_INET6, SOCK_STREAM, 0)) < 0)
+		{
+			perror("socket");
+			close(sock);
+			continue ;
+		}
+		if(setsockopt(sock, SOL_SOCKET, SO_REUSEADDR,
+				&privilege, (socklen_t)sizeof(privilege)) == -1)
+		{
+			close(sock);
+			continue;
+		}
+		if (bind(sock, rp->ai_addr, rp->ai_addrlen) == 0)
+			break ;
+		close(sock);
+	}
+	if (rp == NULL)
+	{
+		exit(EXIT_FAILURE);
+	}
+	freeaddrinfo(res);
+	return (sock);
+}
+
 int					create_sock_stream(char *host_name,
 										char *serv_name,
 										int port,
@@ -67,14 +160,22 @@ int					create_sock_stream(char *host_name,
 {
 	int					sock;
 	int					len;
+	int					privilege;
 	struct sockaddr_in	addr;
 	struct protoent		*protoent;
 	struct servent		*servent;
 	struct hostent		*hostent;
 
+	privilege = 1;
 	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
 		perror("socket");
+		return (-1);
+	}
+	if(setsockopt(sock, SOL_SOCKET, SO_REUSEADDR,
+			&privilege, (socklen_t)sizeof(privilege)) == -1)
+	{
+		perror("setsockopt");
 		return (-1);
 	}
 	if (host_name && !(hostent = gethostbyname(host_name)))
@@ -219,17 +320,30 @@ int					communication_handler(int sock)
 												};
 	struct Session 								session = {sock};
 	struct pollfd								event;
+
+#ifdef IPV6
+	struct sockaddr_in6							addr;
+#else
 	struct sockaddr_in							addr;
+#endif
+
 	socklen_t									len;
 	char										buffer[256];
 	char										msg[256];
 
+#ifdef IPV6
+	len = sizeof(struct sockaddr_in6);
+#else
 	len = sizeof(struct sockaddr_in);
+#endif
+
 	if (getpeername(sock, (struct sockaddr*)&addr, &len) < 0)
 	{
 		perror("getpeername");
 		return (-1);
 	}
+	fprintf(stdout, "len = [%u]\n", len);
+	put_addr((struct sockaddr*)&addr, len);
 	if (http_handshake(sock) < 0)
 	{
 		perror("http_handshake");
@@ -281,9 +395,9 @@ int					connection_handler(int sock)
 {
 	int					sock_com;
 	socklen_t			len;
-	struct sockaddr_in	addr;
+	struct sockaddr_in6	addr;
 
-	len = sizeof(struct sockaddr_in);
+	len = sizeof(struct sockaddr_in6);
 	if (listen(sock, 5) < 0)
 	{
 		perror("listen");
@@ -304,6 +418,13 @@ int					connection_handler(int sock)
 			*/
 			case 0:
 				close(sock);
+				/*
+#ifdef IPV6
+				put_socket_ipv6(sock_com);
+#else
+				put_socket(sock_com);
+#endif
+				*/
 				communication_handler(sock_com);
 				exit(EXIT_SUCCESS);
 				break;
@@ -323,27 +444,44 @@ int					connection_handler(int sock)
 
 int					main(int ac, char **av)
 {
-	t_ident			ident;
 	int				sock_con;
 	char			*serv;
-	int				port;
+	char			*port;
 
 	serv = NULL;
-	port = 0;
+
+#ifdef IPV6
+	port = NULL;
+#else
+	port = "0";
+#endif
+
 	if (ac > 1)
 	{
-		port = atoi(av[1]);
+		port = av[1];
 		if (ac == 3)
 			serv = av[2];
 	}
-	init_ident(&ident);
-	if ((sock_con = create_sock_stream(NULL, serv, port, "tcp")) < 0)
+
+#ifdef IPV6
+	fprintf(stdout, "ipv6\n"); //Debug
+	if ((sock_con = create_sock_stream_ipv6(port, "tcp")) < 0)
 	{
 		fprintf(stderr, "ERROR : sock_con < 0\n");
 		exit(EXIT_FAILURE);
 	}
-	fprintf(stdout, "websocket server adress : ");
+	put_socket_ipv6(sock_con);
+#else
+	fprintf(stdout, "ipv4\n"); //Debug
+	if ((sock_con = create_sock_stream(NULL, NULL, atoi(port), "tcp")) < 0)
+	{
+		fprintf(stderr, "ERROR : sock_con < 0\n");
+		exit(EXIT_FAILURE);
+	}
 	put_socket(sock_con);
+#endif
+
+	fprintf(stdout, "websocket server adress : ");
 	connection_handler(sock_con);
 	close(sock_con);
 	return (EXIT_SUCCESS);
