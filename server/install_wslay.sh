@@ -12,9 +12,4 @@
 ##	python-sphinx for man generation
 #
 
-cd ./.libs/wslay/
-autoreconf -i
-automake
-autoconf
-./configure
-make
+cd ./.libs/wslay/ && autoreconf -i && automake && autoconf && ./configure && make
